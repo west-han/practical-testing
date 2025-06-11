@@ -17,6 +17,7 @@ public class OrderService {
     public OrderResponse createOrder(OrderCreateRequest request) {
         List<String> productNumbers = request.getProductNumbers();
         // Product
+//        productRepository.find
 
         // Order
         return null;
