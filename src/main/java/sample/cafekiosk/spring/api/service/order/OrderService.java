@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import sample.cafekiosk.spring.api.controller.order.request.OrderCreateRequest;
 import sample.cafekiosk.spring.api.controller.order.response.OrderResponse;
 import sample.cafekiosk.spring.domain.ProductRepository;
+import sample.cafekiosk.spring.domain.order.Order;
+import sample.cafekiosk.spring.domain.product.Product;
 
 import java.util.List;
 
@@ -17,7 +19,9 @@ public class OrderService {
     public OrderResponse createOrder(OrderCreateRequest request) {
         List<String> productNumbers = request.getProductNumbers();
         // Product
-//        productRepository.find
+        List<Product> products = productRepository.findAllByProductNumberIn(productNumbers);
+
+        Order order = Order.create(products);
 
         // Order
         return null;
