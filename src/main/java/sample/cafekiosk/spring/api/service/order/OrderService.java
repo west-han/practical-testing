@@ -6,6 +6,7 @@ import sample.cafekiosk.spring.api.controller.order.request.OrderCreateRequest;
 import sample.cafekiosk.spring.api.controller.order.response.OrderResponse;
 import sample.cafekiosk.spring.domain.ProductRepository;
 import sample.cafekiosk.spring.domain.order.Order;
+import sample.cafekiosk.spring.domain.order.OrderRepository;
 import sample.cafekiosk.spring.domain.product.Product;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.util.List;
 @Service
 public class OrderService {
 
+    private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
 
     public OrderResponse createOrder(OrderCreateRequest request, LocalDateTime registeredDateTime) {
@@ -23,9 +25,10 @@ public class OrderService {
         List<Product> products = productRepository.findAllByProductNumberIn(productNumbers);
 
         Order order = Order.create(products, registeredDateTime);
+        Order savedOrder = orderRepository.save(order);
 
         // Order
-        return null;
+        return OrderResponse.of(savedOrder);
     }
 
 }
