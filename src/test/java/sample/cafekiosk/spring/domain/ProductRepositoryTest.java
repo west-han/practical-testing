@@ -68,4 +68,5 @@ class ProductRepositoryTest {
         // 리스트 검증 시에는 extracting - contains 패턴 사용하면 좋음
     }
 
+
 }
