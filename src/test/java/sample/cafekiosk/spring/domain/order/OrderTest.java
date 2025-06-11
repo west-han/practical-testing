@@ -28,6 +28,23 @@ class OrderTest {
 
     }
 
+    @DisplayName("주문 생성 시 주문 상태는 INIT이다.")
+    @Test
+    void init() {
+        // given
+        List<Product> products = List.of(
+                createProduct("001", 1000),
+                createProduct("002", 2000)
+        );
+
+        // when
+        Order order = Order.create(products);
+
+        // then
+        assertThat(order.getOrderStatus()).isEqualByComparingTo(OrderStatus.INIT); // enum 타입 값 비교 메소드
+
+    }
+
     private Product createProduct(String productNumber, int price) {
         return Product.builder()
                 .productNumber(productNumber)
