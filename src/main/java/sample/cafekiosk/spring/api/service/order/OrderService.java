@@ -21,13 +21,11 @@ public class OrderService {
 
     public OrderResponse createOrder(OrderCreateRequest request, LocalDateTime registeredDateTime) {
         List<String> productNumbers = request.getProductNumbers();
-        // Product
         List<Product> products = productRepository.findAllByProductNumberIn(productNumbers);
 
         Order order = Order.create(products, registeredDateTime);
         Order savedOrder = orderRepository.save(order);
 
-        // Order
         return OrderResponse.of(savedOrder);
     }
 
