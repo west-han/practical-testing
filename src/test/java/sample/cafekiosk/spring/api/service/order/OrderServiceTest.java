@@ -26,8 +26,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static sample.cafekiosk.spring.domain.product.ProductSellingStatus.SELLING;
 import static sample.cafekiosk.spring.domain.product.ProductType.*;
 
+/**
+ * 테스트 코드에서 @Transactional 어노테이션을 붙여 자동 Rollback 기능을 사용하면 정말 편리하지만,
+ * 테스트 코드에만 @Transactional을 적용한 뒤 동작이 잘 되는 것을 확인하고, 정작 서비스 클래스에는 누락하여 문제가 생길 위험이 있음.
+ * 수동 삭제를 하지 않고, Transaction 자동 롤백 방식을 사용하는 경우는 이러한 위험을 반드시 인지하고 잘 확인해야 함
+ */
+
 @ActiveProfiles("test")
-@Transactional
+//@Transactional
 @SpringBootTest
 class OrderServiceTest {
 
@@ -46,12 +52,13 @@ class OrderServiceTest {
     @Autowired
     private StockRepository stockRepository;
 
-//    @AfterEach
-//    void tearDown() {
-//        orderProductRepository.deleteAllInBatch();
-//        productRepository.deleteAllInBatch();
-//        orderRepository.deleteAllInBatch();
-//    }
+    @AfterEach
+    void tearDown() {
+        orderProductRepository.deleteAllInBatch();
+        productRepository.deleteAllInBatch();
+        orderRepository.deleteAllInBatch();
+        stockRepository.deleteAllInBatch();
+    }
 
     @DisplayName("주문번호 리스트를 받아 주문을 생성한다.")
     @Test
