@@ -27,14 +27,7 @@ public class ProductService {
 
         Product savedProduct = productRepository.save(product);
 
-        return ProductResponse.builder()
-                .id(savedProduct.getId())
-                .productNumber(savedProduct.getProductNumber())
-                .type(savedProduct.getType())
-                .sellingStatus(savedProduct.getSellingStatus())
-                .name(savedProduct.getName())
-                .price(savedProduct.getPrice())
-                .build();
+        return ProductResponse.of(savedProduct);
     }
 
     public List<ProductResponse> getSellingProducts() {
