@@ -24,9 +24,9 @@ public class ProductCreateRequest {
     // String name -> 상품 이름은 20자 제한(도메인 정책 정의)
     // Request DTO 에서 막고 싶은 마음이 들지만, Controller Layer에서 검증 책임을 가져야 할 규칙이 아님
     // Controller Layer 에서는 유효한 문자열로서 마땅히 가져야 할 조건 정도만 검증, 최소한의 검증
+//    @NotNull // "", "  " 통과
+//    @NotEmpty // "  " 통과, ""는 실패
     @NotBlank(message = "상품 이름은 필수입니다.") // "  ", "", null 모두 실패
-    @NotNull // "", "  " 통과
-    @NotEmpty // "  " 통과, ""는 실패
     private String name;
 
     @Positive(message = "상품 가격은 양수여야 합니다.")
