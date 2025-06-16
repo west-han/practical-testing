@@ -9,8 +9,13 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import sample.cafekiosk.spring.api.controller.product.dto.request.ProductCreateRequest;
 import sample.cafekiosk.spring.api.service.product.ProductService;
+import sample.cafekiosk.spring.api.service.product.response.ProductResponse;
 
+import java.util.List;
+
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -150,6 +155,28 @@ class ProductControllerTest {
                 .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.message").value("상품 이름은 필수입니다."))
                 .andExpect(jsonPath("$.data").isEmpty());
+    }
+
+    @DisplayName("신규 상품을 등록할 때 상품 이름은 필수값이다.")
+    @Test
+    void getSellingProducts() throws Exception {
+        // given
+        List<ProductResponse> result = List.of();
+
+        // 상품 정보 작성해도 되지만, 서비스 등 하위 레이어의 동작은 해당 레이어의 테스트에서 검증했으므로 여기에서 하지 않아도 무방
+        when(productService.getSellingProducts()).thenReturn(result);
+
+        // when // then
+        mockMvc.perform(
+                        get("/api/v1/products/selling")
+//                                .queryParam("name", "이름") // 쿼리 파라미터 존재하는 경우
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("OK"))
+                .andExpect(jsonPath("$.data").isArray());
     }
 
 }

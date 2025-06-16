@@ -10,7 +10,6 @@ import sample.cafekiosk.spring.domain.product.ProductRepository;
 import sample.cafekiosk.spring.domain.product.ProductSellingStatus;
 
 import java.util.List;
-
 /**
  * readOnly = true : 읽기전용
  * CRUD 에서 CUD 동작 X / only Read
