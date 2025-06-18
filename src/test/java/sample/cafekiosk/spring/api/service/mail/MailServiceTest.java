@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import sample.cafekiosk.spring.client.mail.MailSendClient;
 import sample.cafekiosk.spring.domain.history.mail.MailSendHistory;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class MailServiceTest {
 
-    @Mock
+    @Spy // MailSendClient에 여러개의 기능이 존재한다고 가정
     private MailSendClient mailSendClient;
 
     @Mock
@@ -30,16 +31,17 @@ class MailServiceTest {
     @Test
     void sendMail() {
         // given
-        when(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString()))
-                .thenReturn(true);
-
-        boolean result = mailService.sendMail("", "", "", "");
+        // Spy는 실제 객체 기반으로 만들어짐 -> 스터빙 되지 않으므로 그냥 when() 사용하면 안 됨.
+        // doXxx() -> Stubber 반환, 일부 기능은 실제 동작 그대로 수행하고, sendEmail()만 스터빙
+        doReturn(true)
+                .when(mailSendClient)
+                .sendEmail(anyString(), anyString(), anyString(), anyString());
 
         // when
-        // save라는 행위가 1회 호출되었는지 검증
-        verify(mailSendHistoryRepository, times(1)).save(any(MailSendHistory.class));
+        boolean result = mailService.sendMail("", "", "", "");
 
         // then
         assertThat(result).isTrue();
+        verify(mailSendHistoryRepository, times(1)).save(any(MailSendHistory.class));
     }
 }
