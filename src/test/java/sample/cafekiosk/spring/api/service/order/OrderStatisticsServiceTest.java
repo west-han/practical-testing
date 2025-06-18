@@ -46,7 +46,7 @@ class OrderStatisticsServiceTest {
     @Autowired
     private MailSendHistoryRepository mailSendHistoryRepository;
 
-    @MockitoBean
+    @MockitoBean // Spring Context가 있어야 유효한 Mock 'Bean' -> 단위 테스트처럼 Spring Boot 서버 띄우지 않고 테스트할 때 사용 불가
     private MailSendClient mailSendClient;
 
     @AfterEach
