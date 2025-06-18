@@ -3,9 +3,7 @@ package sample.cafekiosk.spring.api.service.mail;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import sample.cafekiosk.spring.client.mail.MailSendClient;
 import sample.cafekiosk.spring.domain.history.mail.MailSendHistory;
@@ -18,7 +16,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class MailServiceTest {
 
-    @Spy // MailSendClient에 여러개의 기능이 존재한다고 가정
+    @Mock // MailSendClient에 여러개의 기능이 존재한다고 가정
     private MailSendClient mailSendClient;
 
     @Mock
@@ -31,11 +29,13 @@ class MailServiceTest {
     @Test
     void sendMail() {
         // given
-        // Spy는 실제 객체 기반으로 만들어짐 -> 스터빙 되지 않으므로 그냥 when() 사용하면 안 됨.
-        // doXxx() -> Stubber 반환, 일부 기능은 실제 동작 그대로 수행하고, sendEmail()만 스터빙
-        doReturn(true)
-                .when(mailSendClient)
-                .sendEmail(anyString(), anyString(), anyString(), anyString());
+        // Mocking 은 테스트 대상 행위를 검증하기 위한 준비 과정이므로 given 절에 해당
+        // 그런데 기본 Mockito 의 메소드는 when 이라는 이름을 가져 약간 어색한 면이 있음
+        // 이 문제를 해결하기 위해 Mockito 를 Wrapping 한 BDDMockito 를 사용
+//        Mockito.when(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString()))
+//                        .thenReturn(true);
+        BDDMockito.given(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString()))
+                .willReturn(true);
 
         // when
         boolean result = mailService.sendMail("", "", "", "");
